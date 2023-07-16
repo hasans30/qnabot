@@ -10,6 +10,10 @@ app = Flask(__name__)
 def message():
     name = request.get_json()
     return name
+  
+@app.route('/health', methods=['POST'])
+def message():
+    return "ok"
 
 if __name__ == '__main__':
    app.run()
