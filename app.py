@@ -11,7 +11,7 @@ def message():
     name = request.get_json()
     return name
   
-@app.route('/health', methods=['POST'])
+@app.route('/health', methods=['GET'])
 def message():
     return "ok"
 
