@@ -12,7 +12,7 @@ def message():
     return name
   
 @app.route('/health', methods=['GET'])
-def message():
+def health():
     return "ok"
 
 if __name__ == '__main__':
