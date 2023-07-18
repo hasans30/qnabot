@@ -1,7 +1,5 @@
-import os
 from decouple import config
 import openai
-import requests
 from twilio.twiml.messaging_response import MessagingResponse
 from aiutils import query_my_question, get_qa
 from azureblobutil import download_blobs
