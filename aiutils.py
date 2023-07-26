@@ -11,7 +11,7 @@ import os
 
 openai_api_key = config("OPENAI_API_KEY")
 
-
+qa=None
 # it loads a directory of documents and return vector db
 def load_documents():
     documents=[]
@@ -30,7 +30,11 @@ def load_documents():
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     return text_splitter.split_documents(documents)  
 
-def get_qa():
+def get_qa(): 
+    global qa
+    if qa is not None:
+        print('found qa. returning it')
+        return qa
     embeddings = OpenAIEmbeddings(openai_api_key=openai_api_key)
     texts = load_documents()
     if texts is None:
@@ -51,6 +55,7 @@ def get_qa():
     )
     chain_type_kwargs = {"prompt": PROMPT}
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=docsearch.as_retriever(), return_source_documents=False, chain_type_kwargs=chain_type_kwargs)
+    print('qa is ready')
     return qa
 
 def query_my_question(queryText):
@@ -59,6 +64,7 @@ def query_my_question(queryText):
         print('qa is none possibly due to data folder does not exist')
         return 'unable to answer your question'
     query={"query": queryText}
+    print(f'querying {query}')
     result=qa.run(query)
     return result
 
