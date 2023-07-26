@@ -41,12 +41,13 @@ def get_qa():
     # Create your Retriever
     prompt_template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
-                    {context}
-
+                    Context: {context}
+                    
                     Question: {question}
-                    Answer in English:"""
+
+                    """
     PROMPT = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
+    template=prompt_template, input_variables=["context", "question"]
     )
     chain_type_kwargs = {"prompt": PROMPT}
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=docsearch.as_retriever(), return_source_documents=False, chain_type_kwargs=chain_type_kwargs)
@@ -58,7 +59,7 @@ def query_my_question(queryText):
         print('qa is none possibly due to data folder does not exist')
         return 'unable to answer your question'
     query={"query": queryText}
-    result=qa.run(queryText)
+    result=qa.run(query)
     return result
 
 # Compare this snippet from app.py:
