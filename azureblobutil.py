@@ -3,12 +3,16 @@ import os
 import sys
 from azure.storage.blob import ContainerClient, BlobServiceClient
 import constants
+from decouple import config
+
+
+openai_api_key = config("OPENAI_API_KEY")
 
 data_folder = constants.data_folder
 def download_blobs():
     try:
-        CONNECTION_STRING = os.environ['AZURE_STORAGE_CONNECTION_STRING']
-        CONTAINER_NAME = os.environ['AZURE_STORAGE_CONTAINER_NAME']
+        CONNECTION_STRING = config('AZURE_STORAGE_CONNECTION_STRING')
+        CONTAINER_NAME = config('AZURE_STORAGE_CONTAINER_NAME')
         
         # create data folder
         if not os.path.exists(data_folder):
