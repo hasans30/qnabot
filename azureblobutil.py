@@ -13,7 +13,8 @@ def download_blobs():
     try:
         CONNECTION_STRING = config('AZURE_STORAGE_CONNECTION_STRING')
         CONTAINER_NAME = config('AZURE_STORAGE_CONTAINER_NAME')
-        
+        if CONTAINER_NAME == constants.test_container:
+            return
         # create data folder
         if not os.path.exists(data_folder):
             os.makedirs(data_folder)

@@ -9,6 +9,7 @@ from flask import (Flask, redirect, render_template, request,
 
 app = Flask(__name__)
 openai.api_key = config("OPENAI_API_KEY")
+portNumber=config("FLASK_RUN_PORT","5000")
 
 
 @app.route('/message', methods=['POST'])
@@ -37,6 +38,7 @@ def health():
     return "ok"
 
 if __name__ == '__main__':
-    initdata()
-    app.run(port=8000)
+    download_blobs()
+    get_qa()
+    app.run(port=portNumber)
     
