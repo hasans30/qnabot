@@ -1,8 +1,9 @@
 from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.agents import create_csv_agent
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain import OpenAI
+from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import DirectoryLoader, TextLoader, PyPDFLoader
 from decouple import config
@@ -12,6 +13,8 @@ import os
 openai_api_key = config("OPENAI_API_KEY")
 
 qa=None
+agent=None
+
 # it loads a directory of documents and return vector db
 def load_documents():
     documents=[]
@@ -29,6 +32,22 @@ def load_documents():
             
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     return text_splitter.split_documents(documents)  
+
+def get_agent():
+    global agent
+    if not os.path.exists('data/po1.csv'):
+        print('data/po1.csv does not exist')
+        return None
+    if agent is not None:
+        print('found agent. returning it')
+        return agent
+    agent = create_csv_agent(
+    OpenAI(temperature=0),
+     'data/po1.csv', verbose=False)
+    print('agent is ready')
+    return agent
+
+
 
 def get_qa(): 
     global qa
@@ -59,14 +78,24 @@ def get_qa():
     return qa
 
 def query_my_question(queryText):
-    qa=get_qa()
-    if qa is None:
-        print('qa is none possibly due to data folder does not exist')
-        return 'unable to answer your question'
-    query={"query": queryText}
-    print(f'querying {query}')
-    result=qa.run(query)
-    return result
+    is_csv_query=queryText.startswith('csv:')
+    if(not is_csv_query):
+        qa=get_qa()
+        if qa is None:
+            print('qa is none possibly due to data folder does not exist')
+            return 'unable to answer your question'
+        query={"query": queryText}
+        print(f'querying {query}')
+        result=qa.run(query)
+        return result
+    else:
+        agent=get_agent()
+        if agent is None:
+            print('agent is none possibly due to data folder does not exist')
+            return 'unable to answer your question'
+        queryText=queryText[4:]
+        result=agent.run(queryText)
+        return result
 
 # Compare this snippet from app.py:
 if __name__ == '__main__':
