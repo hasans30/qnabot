@@ -36,7 +36,6 @@ def load_documents():
 
 def get_agent():
     global agent
-    os.path.join()
     if not os.path.exists('data/po1.csv'):
         print('data/po1.csv does not exist')
         return None
