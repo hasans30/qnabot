@@ -1,5 +1,6 @@
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.agents import create_csv_agent
+from langchain.agents.agent_types import AgentType
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -50,7 +51,8 @@ def get_agent():
     agent = create_csv_agent(
         OpenAI(temperature=0),
         get_bloblist
-        ,verbose = False
+        ,verbose = True,
+        agent_type=AgentType.OPENAI_FUNCTIONS,
     )
     print('agent is ready')
     return agent
