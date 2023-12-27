@@ -37,6 +37,7 @@ def load_documents():
 
 def get_agent():
     global agent
+    a=[]
     if not os.path.exists('data/po1.csv'):
         print('data/po1.csv does not exist')
         return None
@@ -48,9 +49,10 @@ def get_agent():
     OpenAI(temperature=0),
      'data/po1.csv', verbose=False)'''
     print( f'Blob List with path::{get_bloblist()}' )
+    a=get_bloblist();
     agent = create_csv_agent(
         OpenAI(temperature=0),
-        get_bloblist
+        a[:2]
         ,verbose = True,
         agent_type=AgentType.OPENAI_FUNCTIONS,
     )
