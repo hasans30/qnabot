@@ -9,6 +9,7 @@ from langchain.document_loaders import DirectoryLoader, TextLoader, PyPDFLoader
 from decouple import config
 import sys
 import os
+from azureblobutil import get_bloblist
 
 openai_api_key = config("OPENAI_API_KEY")
 
@@ -35,15 +36,23 @@ def load_documents():
 
 def get_agent():
     global agent
+    os.path.join()
     if not os.path.exists('data/po1.csv'):
         print('data/po1.csv does not exist')
         return None
     if agent is not None:
         print('found agent. returning it')
         return agent
-    agent = create_csv_agent(
+    ''' 
+   agent = create_csv_agent(
     OpenAI(temperature=0),
-     'data/po1.csv', verbose=False)
+     'data/po1.csv', verbose=False)'''
+    print( f'Blob List with path::{get_bloblist()}' )
+    agent = create_csv_agent(
+        OpenAI(temperature=0),
+        get_bloblist
+        ,verbose = False
+    )
     print('agent is ready')
     return agent
 
