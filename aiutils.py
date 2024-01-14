@@ -72,7 +72,7 @@ def get_qa():
         print('texts is none possibly due to data folder does not exist')
         return None
     docsearch = FAISS.from_documents(texts, embeddings)
-    llm = OpenAI(temperature=0, openai_api_key=openai_api_key)
+    llm = OpenAI(temperature=0, model="gpt-3.5-turbo-instruct" ,openai_api_key=openai_api_key)
     # Create your Retriever
     prompt_template = """Use the following pieces of context to answer the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
 
