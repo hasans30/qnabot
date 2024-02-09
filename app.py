@@ -28,7 +28,7 @@ def message():
 def initdata():
     try:
         download_blobs()
-        get_qa()
+        get_qa(True)
         return "ok"
     except Exception as e:
         return "error initializing data"
@@ -38,7 +38,7 @@ def health():
     return "ok"
 
 if __name__ == '__main__':
-    download_blobs()
-    get_qa()
+    # download_blobs()
+    get_qa(True)
     app.run(port=portNumber)
     
