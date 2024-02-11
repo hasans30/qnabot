@@ -14,7 +14,8 @@ portNumber=config("FLASK_RUN_PORT","5000")
 
 @app.route('/message', methods=['POST'])
 def message():
-    incoming_msg = request.values.get('Body', '').lower()
+    # incoming_msg = request.values.get('Body', '').lower()
+    incoming_msg = request.values.get('Body', '')
     whatsapp_number = request.values.get('From').split("whatsapp:")[-1]
     print(f"Chatting with this number: {whatsapp_number}")
     resp = MessagingResponse()

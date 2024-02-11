@@ -1,3 +1,4 @@
+from doctest import OutputChecker
 from langchain_openai import OpenAIEmbeddings
 from langchain.agents import Tool
 from langchain.tools import tool,StructuredTool,BaseTool
@@ -69,6 +70,7 @@ def get_agent(dframe=False):
         a=get_bloblist();
         for each in a:
             if each=='data/Customer Name.csv':
+                print(f'"Check Each::{each}"')
                 df_cus = pand.read_csv(each)
             if each=='data/GL Description.csv':    
                 gls = pand.read_csv('data/GL Description.csv')
@@ -82,7 +84,14 @@ def get_agent(dframe=False):
                 sale22 = pand.read_csv('data/Sales data_2022.csv')
             if each=='data/Sales data_2023.csv':    
                 sale23 = pand.read_csv('data/Sales data_2023.csv')
-        sales1 = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )
+        # df_cus = pand.read_csv("data/md/Customer Name.csv") 
+        # gls = pand.read_csv('data/md/GL Description.csv')       
+        # pfs = pand.read_csv('data/md/Profit Center Name.csv')
+        # sale20 = pand.read_csv('data/md/Sales data_2020.csv')
+        # sale21 = pand.read_csv('data/md/Sales data_2021.csv')
+        # sale22 = pand.read_csv('data/md/Sales data_2022.csv')
+        # sale23 = pand.read_csv('data/md/Sales data_2023.csv')
+        # sales1 = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )
         # Define a list of tools
         tools = [
             Tool(
@@ -110,7 +119,7 @@ def get_agent(dframe=False):
                 description="useful for when you need to search for GL description against a GL no"
             )     
         ]    
-        PREFIX = ''' In Addition Consider the following:
+        PREFIX = ''' Always startover and do not read from memory also DO NOT exclude negative values from your calculation return the last observation as result, In Addition Consider the following:
                         "Sales" means "Amount"
                         "Month" means "Period"
                     '''
@@ -176,7 +185,7 @@ def query_my_question(queryText):
         queryText=queryText[4:]
         #result=agent.run(queryText)
         result=agent.invoke(queryText)
-        return result
+        return result["output"]
 ####### >>>>Tool Sections Begin ######
 @tool
 def mysales(kk):
@@ -186,7 +195,7 @@ def mysales(kk):
 #     agent2 = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct',openai_api_key=os.environ["OPENAI_API_KEY"]),[sales1],verbose=True,include_df_in_prompt=False,return_intermediate_steps=False,max_iterations=20)
 # #     return agent2.invoke('rerutn result as per the supplied prompt')
 #     return agent2.invoke(' Whats the output for {df1}')
-    return 'df1[kk]'
+    return kk
     
 @tool
 def mycus():
