@@ -91,7 +91,7 @@ def get_agent(dframe=False):
         # sale21 = pand.read_csv('data/md/Sales data_2021.csv')
         # sale22 = pand.read_csv('data/md/Sales data_2022.csv')
         # sale23 = pand.read_csv('data/md/Sales data_2023.csv')
-        # sales1 = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )
+        sales1 = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )
         # Define a list of tools
         tools = [
             Tool(
