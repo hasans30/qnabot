@@ -67,31 +67,31 @@ def get_agent(dframe=False):
         print('agent is ready')
         return agent
     else:
-        # a=get_bloblist();
-        # for each in a:
-        #     if each=='data/Customer Name.csv':
-        #         print(f'"Check Each::{each}"')
-        #         df_cus = pand.read_csv(each)
-        #     if each=='data/GL Description.csv':    
-        #         gls = pand.read_csv('data/GL Description.csv')
-        #     if each=='data/Profit Center Name.csv':        
-        #         pfs = pand.read_csv('data/Profit Center Name.csv')
-        #     if each=='data/Sales data_2020.csv':    
-        #         sale20 = pand.read_csv('data/Sales data_2020.csv')
-        #     if each=='data/Sales data_2021.csv':    
-        #         sale21 = pand.read_csv('data/Sales data_2021.csv')
-        #     if each=='data/Sales data_2022.csv':    
-        #         sale22 = pand.read_csv('data/Sales data_2022.csv')
-        #     if each=='data/Sales data_2023.csv':    
-        #         sale23 = pand.read_csv('data/Sales data_2023.csv')
-        global pfs
-        df_cus = pand.read_csv("data/md/Customer Name.csv") 
-        gls = pand.read_csv('data/md/GL Description.csv')       
-        pfs = pand.read_csv('data/md/Profit Center Name.csv')
-        sale20 = pand.read_csv('data/md/Sales data_2020.csv')
-        sale21 = pand.read_csv('data/md/Sales data_2021.csv')
-        sale22 = pand.read_csv('data/md/Sales data_2022.csv')
-        sale23 = pand.read_csv('data/md/Sales data_2023.csv')
+        a=get_bloblist();
+        for each in a:
+            if each=='data/Customer Name.csv':
+                print(f'"Check Each::{each}"')
+                df_cus = pand.read_csv(each)
+            if each=='data/GL Description.csv':    
+                gls = pand.read_csv('data/GL Description.csv')
+            if each=='data/Profit Center Name.csv':    
+                global pfs    
+                pfs = pand.read_csv('data/Profit Center Name.csv')
+            if each=='data/Sales data_2020.csv':    
+                sale20 = pand.read_csv('data/Sales data_2020.csv')
+            if each=='data/Sales data_2021.csv':    
+                sale21 = pand.read_csv('data/Sales data_2021.csv')
+            if each=='data/Sales data_2022.csv':    
+                sale22 = pand.read_csv('data/Sales data_2022.csv')
+            if each=='data/Sales data_2023.csv':    
+                sale23 = pand.read_csv('data/Sales data_2023.csv')
+        # df_cus = pand.read_csv("data/md/Customer Name.csv") 
+        # gls = pand.read_csv('data/md/GL Description.csv')       
+        # pfs = pand.read_csv('data/md/Profit Center Name.csv')
+        # sale20 = pand.read_csv('data/md/Sales data_2020.csv')
+        # sale21 = pand.read_csv('data/md/Sales data_2021.csv')
+        # sale22 = pand.read_csv('data/md/Sales data_2022.csv')
+        # sale23 = pand.read_csv('data/md/Sales data_2023.csv')
         global sales1 ;
         sales1 = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )
         # Define a list of tools
