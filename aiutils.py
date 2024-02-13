@@ -67,30 +67,32 @@ def get_agent(dframe=False):
         print('agent is ready')
         return agent
     else:
-        a=get_bloblist();
-        for each in a:
-            if each=='data/Customer Name.csv':
-                print(f'"Check Each::{each}"')
-                df_cus = pand.read_csv(each)
-            if each=='data/GL Description.csv':    
-                gls = pand.read_csv('data/GL Description.csv')
-            if each=='data/Profit Center Name.csv':        
-                pfs = pand.read_csv('data/Profit Center Name.csv')
-            if each=='data/Sales data_2020.csv':    
-                sale20 = pand.read_csv('data/Sales data_2020.csv')
-            if each=='data/Sales data_2021.csv':    
-                sale21 = pand.read_csv('data/Sales data_2021.csv')
-            if each=='data/Sales data_2022.csv':    
-                sale22 = pand.read_csv('data/Sales data_2022.csv')
-            if each=='data/Sales data_2023.csv':    
-                sale23 = pand.read_csv('data/Sales data_2023.csv')
-        # df_cus = pand.read_csv("data/md/Customer Name.csv") 
-        # gls = pand.read_csv('data/md/GL Description.csv')       
-        # pfs = pand.read_csv('data/md/Profit Center Name.csv')
-        # sale20 = pand.read_csv('data/md/Sales data_2020.csv')
-        # sale21 = pand.read_csv('data/md/Sales data_2021.csv')
-        # sale22 = pand.read_csv('data/md/Sales data_2022.csv')
-        # sale23 = pand.read_csv('data/md/Sales data_2023.csv')
+        # a=get_bloblist();
+        # for each in a:
+        #     if each=='data/Customer Name.csv':
+        #         print(f'"Check Each::{each}"')
+        #         df_cus = pand.read_csv(each)
+        #     if each=='data/GL Description.csv':    
+        #         gls = pand.read_csv('data/GL Description.csv')
+        #     if each=='data/Profit Center Name.csv':        
+        #         pfs = pand.read_csv('data/Profit Center Name.csv')
+        #     if each=='data/Sales data_2020.csv':    
+        #         sale20 = pand.read_csv('data/Sales data_2020.csv')
+        #     if each=='data/Sales data_2021.csv':    
+        #         sale21 = pand.read_csv('data/Sales data_2021.csv')
+        #     if each=='data/Sales data_2022.csv':    
+        #         sale22 = pand.read_csv('data/Sales data_2022.csv')
+        #     if each=='data/Sales data_2023.csv':    
+        #         sale23 = pand.read_csv('data/Sales data_2023.csv')
+        global pfs
+        df_cus = pand.read_csv("data/md/Customer Name.csv") 
+        gls = pand.read_csv('data/md/GL Description.csv')       
+        pfs = pand.read_csv('data/md/Profit Center Name.csv')
+        sale20 = pand.read_csv('data/md/Sales data_2020.csv')
+        sale21 = pand.read_csv('data/md/Sales data_2021.csv')
+        sale22 = pand.read_csv('data/md/Sales data_2022.csv')
+        sale23 = pand.read_csv('data/md/Sales data_2023.csv')
+        global sales1 ;
         sales1 = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )
         # Define a list of tools
         tools = [
@@ -110,7 +112,7 @@ def get_agent(dframe=False):
                 name = "df4",
                 func=mypfs
                 ,
-                description="useful for when you need to search profit center name"
+                description="Only For Profit Center Name"
             ),
             Tool(
                 name = "gls",
@@ -131,6 +133,7 @@ def get_agent(dframe=False):
                                                      return_intermediate_steps=False,
                                                      max_iterations=20,
                                                      include_df_in_prompt=True,extra_tools=tools)
+                                                    #  include_df_in_prompt=True)        
         return agent
         
 
@@ -195,20 +198,21 @@ def mysales(kk):
 #     agent2 = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct',openai_api_key=os.environ["OPENAI_API_KEY"]),[sales1],verbose=True,include_df_in_prompt=False,return_intermediate_steps=False,max_iterations=20)
 # #     return agent2.invoke('rerutn result as per the supplied prompt')
 #     return agent2.invoke(' Whats the output for {df1}')
-    return kk
+    txt = kk.replace('df1','sales1')
+    return eval(txt)
     
 @tool
-def mycus():
+def mycus(kk):
     ''' For Customer related information refer this'''
     return 'df_cus'
 @tool
-def mygls():
+def mygls(kk):
     ''' For GL Description related information refer this'''
     return 'gls'
 @tool
-def mypfs():
-    ''' For Profit center name or description related information refer this'''
-    return 'pfs'
+def mypfs(kk):
+    ''' Profit Center Names'''
+    return pfs['Profit Center']
 ####### Tool Sections End<<<<<< ######   
 # Compare this snippet from app.py:
 if __name__ == '__main__':
