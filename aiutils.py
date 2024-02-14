@@ -198,8 +198,8 @@ def mysales(kk):
 #     agent2 = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct',openai_api_key=os.environ["OPENAI_API_KEY"]),[sales1],verbose=True,include_df_in_prompt=False,return_intermediate_steps=False,max_iterations=20)
 # #     return agent2.invoke('rerutn result as per the supplied prompt')
 #     return agent2.invoke(' Whats the output for {df1}')
-    txt = kk.replace('df1','sales1')
-    return eval(txt)
+    # txt = kk.replace('df1','sales1')
+    return eval(kk)
     
 @tool
 def mycus(kk):
