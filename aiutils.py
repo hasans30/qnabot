@@ -203,7 +203,6 @@ def mysales(kk):
 # #     return agent2.invoke('rerutn result as per the supplied prompt')
 #     return agent2.invoke(' Whats the output for {df1}')
     txt = kk.replace('df1','sales1')
-    print(f'"Check Type of Input::"{txt}'+f'::"Sales DF::"{sales1}')
     return eval(txt)
     
 @tool
