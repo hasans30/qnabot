@@ -125,7 +125,9 @@ def get_agent(dframe=False):
                 description="useful for when you need to search for GL description against a GL no"
             )     
         ]    
-        PREFIX = ''' Always startover and do not read from memory also DO NOT exclude negative values from your calculation return the last observation as result, In Addition Consider the following:
+        # PREFIX = ''' Always startover and do not read from memory also DO NOT exclude negative values from your calculation return the last observation as result, In Addition Consider the following:
+        PREFIX = ''' DO NOT exclude negative values, In Addition Consider the following:
+                    If you find an empty result just STOP and DO NOT TRY to find a result ANY FURTHER
                         "Sales" means "Amount"
                         "Month" means "Period"
                     '''
@@ -185,6 +187,7 @@ def query_my_question(queryText):
         result=qa.run(query)
         return result
     else:
+            
         agent=get_agent(dframe=True)
         if agent is None:
             print('agent is none possibly due to data folder does not exist')
@@ -192,6 +195,8 @@ def query_my_question(queryText):
         queryText=queryText[4:]
         #result=agent.run(queryText)
         result=agent.invoke(queryText)
+        # print(f'Result:{x}::{result["output"]}')
+            # queryText='csv: Total Sales figure of customer 1003564  for period 4 of financial year 2023'
         return result["output"]
 ####### >>>>Tool Sections Begin ######
 @tool
@@ -220,9 +225,20 @@ def mysales(kk):
             if each=='data/Sales data_2022.csv':    
                 sale22 = pand.read_csv('data/Sales data_2022.csv')
             if each=='data/Sales data_2023.csv':    
-                sale23 = pand.read_csv('data/Sales data_2023.csv')    
-    sales1 = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )          
-    txt = kk.replace('df1','sales1')
+                sale23 = pand.read_csv('data/Sales data_2023.csv')   
+    else:
+        df_cus = pand.read_csv("data/md/Customer Name.csv") 
+        gls = pand.read_csv('data/md/GL Description.csv')       
+        pfs = pand.read_csv('data/md/Profit Center Name.csv')
+        sale20 = pand.read_csv('data/md/Sales data_2020.csv')
+        sale21 = pand.read_csv('data/md/Sales data_2021.csv')
+        sale22 = pand.read_csv('data/md/Sales data_2022.csv')
+        sale23 = pand.read_csv('data/md/Sales data_2023.csv')
+
+                
+    __sale_tot = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )          
+    txt = kk.replace('df1','__sale_tot')
+    print(f'Agent Tool::Result Sales::{eval(txt)}')
     return eval(txt)
     
 @tool
