@@ -17,7 +17,7 @@ from langchain_experimental.agents.agent_toolkits.pandas.prompt import PREFIX
 import sys
 import os
 import pandas as pand
-from azureblobutil import get_bloblist
+from azureblobutil import get_bloblist, myblobList
 
 openai_api_key = config("OPENAI_API_KEY")
 
@@ -202,6 +202,26 @@ def mysales(kk):
 #     agent2 = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct',openai_api_key=os.environ["OPENAI_API_KEY"]),[sales1],verbose=True,include_df_in_prompt=False,return_intermediate_steps=False,max_iterations=20)
 # #     return agent2.invoke('rerutn result as per the supplied prompt')
 #     return agent2.invoke(' Whats the output for {df1}')
+    a=get_bloblist();
+    if(a!=None):
+        for each in a:
+            if each=='data/Customer Name.csv':
+                print(f'"Check Each::{each}"')
+                df_cus = pand.read_csv(each)
+            if each=='data/GL Description.csv':    
+                gls = pand.read_csv('data/GL Description.csv')
+            if each=='data/Profit Center Name.csv':    
+                global pfs    
+                pfs = pand.read_csv('data/Profit Center Name.csv')
+            if each=='data/Sales data_2020.csv':    
+                sale20 = pand.read_csv('data/Sales data_2020.csv')
+            if each=='data/Sales data_2021.csv':    
+                sale21 = pand.read_csv('data/Sales data_2021.csv')
+            if each=='data/Sales data_2022.csv':    
+                sale22 = pand.read_csv('data/Sales data_2022.csv')
+            if each=='data/Sales data_2023.csv':    
+                sale23 = pand.read_csv('data/Sales data_2023.csv')    
+    sales1 = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )          
     txt = kk.replace('df1','sales1')
     return eval(txt)
     
