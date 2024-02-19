@@ -137,7 +137,7 @@ def get_agent(dframe=False):
                                                      verbose=True,
                                                      prefix=PREFIX,
                                                      return_intermediate_steps=False,
-                                                     max_iterations=20,
+                                                     max_iterations=30,
                                                      include_df_in_prompt=True,extra_tools=tools)
                                                     #  include_df_in_prompt=True)        
         return agent
