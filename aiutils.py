@@ -7,7 +7,7 @@ from langchain.agents.agent_types import AgentType
 from langchain.prompts import PromptTemplate
 from langchain_community.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAI
+from langchain_openai import OpenAI,ChatOpenAI
 # from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import DirectoryLoader, TextLoader, PyPDFLoader
@@ -127,17 +127,19 @@ def get_agent(dframe=False):
         ]    
         # PREFIX = ''' Always startover and do not read from memory also DO NOT exclude negative values from your calculation return the last observation as result, In Addition Consider the following:
         PREFIX = ''' DO NOT exclude negative values, In Addition Consider the following:
+                    DO NOT call tools UNNECESSARILY
                     If you find an empty result just STOP and DO NOT TRY to find a result ANY FURTHER
                         "Sales" means "Amount"
                         "Month" means "Period"
                     '''
-        agent = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct',
-                                                     openai_api_key=openai_api_key),
+        agent = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct'),
+        # client = ChatOpenAI(temperature=0,openai_api_key=openai_api_key)
+        # agent = create_pandas_dataframe_agent(client,
                                                      [sales1],
                                                      verbose=True,
                                                      prefix=PREFIX,
                                                      return_intermediate_steps=False,
-                                                     max_iterations=30,
+                                                     max_iterations=50,
                                                      include_df_in_prompt=True,extra_tools=tools)
                                                     #  include_df_in_prompt=True)        
         return agent
