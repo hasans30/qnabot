@@ -1,6 +1,6 @@
 from doctest import OutputChecker
 from langchain_openai import OpenAIEmbeddings
-from langchain.agents import Tool
+from langchain.agents import Tool,AgentExecutor
 from langchain.tools import tool,StructuredTool,BaseTool
 from langchain_core.utils.function_calling import convert_to_openai_function
 from langchain.agents.agent_types import AgentType
@@ -10,6 +10,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAI,ChatOpenAI
 # from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
+from hdbcli import dbapi,resultrow
 from langchain_community.document_loaders import DirectoryLoader, TextLoader, PyPDFLoader
 from decouple import config
 from langchain_experimental.agents import create_pandas_dataframe_agent,create_csv_agent
@@ -20,10 +21,10 @@ import pandas as pand
 from azureblobutil import get_bloblist, myblobList
 
 openai_api_key = config("OPENAI_API_KEY")
-
+# db = dbapi.connect()
 qa=None
 agent=None
-
+global tools
 # it loads a directory of documents and return vector db
 def load_documents():
     documents=[]
@@ -196,7 +197,9 @@ def query_my_question(queryText):
             return 'unable to answer your question'
         queryText=queryText[4:]
         #result=agent.run(queryText)
-        result=agent.invoke(queryText)
+        agent_exec = AgentExecutor( agent= agent, tools=agent.tools ,verbose=False, handle_parsing_errors=True)
+        # result=agent_exec.invoke({"input":queryText})
+        result = agent.invoke(queryText)
         # print(f'Result:{x}::{result["output"]}')
             # queryText='csv: Total Sales figure of customer 1003564  for period 4 of financial year 2023'
         return result["output"]
