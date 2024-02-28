@@ -10,7 +10,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAI,ChatOpenAI
 # from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
-from hdbcli import dbapi,resultrow
+# from hdbcli import dbapi,resultrow
 from langchain_community.document_loaders import DirectoryLoader, TextLoader, PyPDFLoader
 from decouple import config
 from langchain_experimental.agents import create_pandas_dataframe_agent,create_csv_agent
