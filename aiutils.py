@@ -8,6 +8,8 @@ from langchain.prompts import PromptTemplate
 from langchain_community.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAI,ChatOpenAI
+from langchain import hub
+
 # from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 # from hdbcli import dbapi,resultrow
@@ -19,8 +21,15 @@ import sys
 import os
 import pandas as pand
 from azureblobutil import get_bloblist, myblobList
+from mistralai.client import MistralClient
+from mistralai.models.chat_completion import ChatMessage
+from langchain_mistralai.chat_models import ChatMistralAI
+from langchain_mistralai.embeddings import MistralAIEmbeddings
 
 openai_api_key = config("OPENAI_API_KEY")
+# hf_api_key = config("HUGGING_FACE_API_KEY")
+# obj = hub.pull("lambheaded/mixtral",api_key=hf_api_key)
+
 # db = dbapi.connect()
 qa=None
 agent=None
@@ -133,11 +142,12 @@ def get_agent(dframe=False):
                         "Sales" means "Amount"
                         "Month" means "Period"
                     '''
-        agent = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct'),
+        agent = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct',openai_api_key=openai_api_key),
         # client = ChatOpenAI(temperature=0,openai_api_key=openai_api_key)
         # agent = create_pandas_dataframe_agent(client,
                                                      [sales1],
                                                      verbose=True,
+                                                     agent_executor_kwargs={"handle_parsing_errors":True},
                                                      prefix=PREFIX,
                                                      return_intermediate_steps=False,
                                                      max_iterations=50,
@@ -198,8 +208,8 @@ def query_my_question(queryText):
         queryText=queryText[4:]
         #result=agent.run(queryText)
         agent_exec = AgentExecutor( agent= agent, tools=agent.tools ,verbose=False, handle_parsing_errors=True)
-        # result=agent_exec.invoke({"input":queryText})
-        result = agent.invoke(queryText)
+        result=agent_exec.invoke({"input":queryText})
+        # result = agent.invoke(queryText)
         # print(f'Result:{x}::{result["output"]}')
             # queryText='csv: Total Sales figure of customer 1003564  for period 4 of financial year 2023'
         return result["output"]
@@ -242,7 +252,11 @@ def mysales(kk):
 
                 
     __sale_tot = pand.concat( [sale20 , sale21 , sale22 , sale23],ignore_index=True )          
-    txt = kk.replace('df1','__sale_tot')
+    # txt = kk.replace('df1','__sale_tot')
+    if 'df' in kk:
+        txt = kk.replace('df1','__sale_tot')
+    if 'df' in txt:
+        txt = txt.replace('df','__sale_tot')
     print(f'Agent Tool::Result Sales::{eval(txt)}')
     return eval(txt)
     
