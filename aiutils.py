@@ -141,6 +141,7 @@ def get_agent(dframe=False):
                     If you find an empty result just STOP and DO NOT TRY to find a result ANY FURTHER
                         "Sales" means "Amount"
                         "Month" means "Period"
+                     ONLY Answer what you have been asked for 
                     '''
         agent = create_pandas_dataframe_agent(OpenAI(temperature=0,model='gpt-3.5-turbo-instruct',openai_api_key=openai_api_key),
         # client = ChatOpenAI(temperature=0,openai_api_key=openai_api_key)
@@ -206,10 +207,10 @@ def query_my_question(queryText):
             print('agent is none possibly due to data folder does not exist')
             return 'unable to answer your question'
         queryText=queryText[4:]
-        #result=agent.run(queryText)
-        agent_exec = AgentExecutor( agent= agent, tools=agent.tools ,verbose=False, handle_parsing_errors=True)
-        result=agent_exec.invoke({"input":queryText})
-        # result = agent.invoke(queryText)
+        # result=agent.run(queryText)
+        # agent_exec = AgentExecutor( agent= agent, tools=agent.tools ,verbose=False, handle_parsing_errors=True)
+        # result=agent_exec.invoke({"input":queryText})
+        result = agent.invoke(queryText)
         # print(f'Result:{x}::{result["output"]}')
             # queryText='csv: Total Sales figure of customer 1003564  for period 4 of financial year 2023'
         return result["output"]
