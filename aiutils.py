@@ -21,10 +21,10 @@ import sys
 import os
 import pandas as pand
 from azureblobutil import get_bloblist, myblobList
-from mistralai.client import MistralClient
-from mistralai.models.chat_completion import ChatMessage
-from langchain_mistralai.chat_models import ChatMistralAI
-from langchain_mistralai.embeddings import MistralAIEmbeddings
+# from mistralai.client import MistralClient
+# from mistralai.models.chat_completion import ChatMessage
+# from langchain_mistralai.chat_models import ChatMistralAI
+# from langchain_mistralai.embeddings import MistralAIEmbeddings
 
 openai_api_key = config("OPENAI_API_KEY")
 # hf_api_key = config("HUGGING_FACE_API_KEY")
